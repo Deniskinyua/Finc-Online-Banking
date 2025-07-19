@@ -1,0 +1,30 @@
+@startuml
+class UserController{
++ registerUser(UserDTO):: UserResponse
++ getUser(UUID) : UserResponse
++ updateUser (UUID, UserDTO )
+}
+
+class UserService{
+- UserRepository userRepository
+
++createUser(UserDTO) : User
++updateUser(UUID, UserDTO)
++findUser(UUID) : Optional<User>
+}
+
+class User {
++save(User): User
++findById(UUID) : Optional<User>
+}
+
+interface UserRepository
+interface JpaRepository
+
+UserController --> UserService
+UserService --> UserRepository
+UserRepository --> User
+UserRepository <|.. JpaRepository
+
+
+@enduml

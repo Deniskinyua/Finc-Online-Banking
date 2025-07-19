@@ -1,0 +1,24 @@
+@startuml
+
+actor actor as User
+participant UserController
+participant UserService
+participant UserRepository
+participant Redis
+
+User -> UserController : POST/users{UserDTO}
+UserController -> UserService : createUser(dto)
+UserController <-- UserService : UserResponse
+
+UserService -> UserRepository: findByEmail(dto.email)
+UserService <-- UserRepository : Optional.empty()
+
+UserService -> UserService : validate dto
+
+UserService -> UserRepository : save(newUser)
+UserService <-- UserRepository : savedUser
+
+UserService -> Redis : put(userId, savedUser)
+
+User <-- UserController : 201 Created
+@enduml
